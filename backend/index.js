@@ -21,7 +21,7 @@ app.get("/api/health", (_req, res) => {
 app.get("/api/health/db", async (_req, res) => {
   try {
     await prisma.$runCommandRaw({ ping: 1 });
-
+    
     res.json({
       ok: true,
       database: "connected",
