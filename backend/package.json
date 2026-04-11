@@ -4,7 +4,7 @@
   "description": "Backend Express + Prisma pour le wiki Ascension",
   "license": "ISC",
   "author": "Iseeuto",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
@@ -18,7 +18,8 @@
     "@prisma/client": "6.19.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.14",

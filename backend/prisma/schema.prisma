@@ -1,20 +1,60 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
-model Article {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  slug      String   @unique
-  title     String
-  category  String
-  excerpt   String?
-  content   String
-  published Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+generator client {
+  provider = "prisma-client-js"
+}
+
+type Section {
+  title   String
+  content String
+}
+
+model Class {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String    @unique
+  description String?
+  hitDice     Int?
+  sections    Section[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  subclasses Subclass[]
+}
+
+model Subclass {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  classId     String    @db.ObjectId
+  sections    Section[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  class Class @relation(fields: [classId], references: [id])
+
+  @@unique([name, classId])
+}
+
+model Race {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String    @unique
+  description String?
+  size        String?
+  speed       Int?
+  sections    Section[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Feat {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  name         String    @unique
+  description  String?
+  prerequisite String?
+  sections     Section[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
