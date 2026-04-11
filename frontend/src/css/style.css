@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+:root {
+  color: #141414;
+  background: #ffffff;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  background: rgba(182, 182, 182, 0.22);
+}

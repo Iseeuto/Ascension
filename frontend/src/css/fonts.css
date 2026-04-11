@@ -1,0 +1,55 @@
+@font-face {
+  font-family: "DragonHunter";
+  src: url("../assets/fonts/DragonHunter.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vecna";
+  src: url("../assets/fonts/Vecna.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EbonSigil";
+  src: url("../assets/fonts/EbonSigil.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Varnyx";
+  src: url("../assets/fonts/Varnyx.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Runavess";
+  src: url("../assets/fonts/Runavess.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Firlest";
+  src: url("../assets/fonts/Firlest.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mirdane";
+  src: url("../assets/fonts/Mirdane.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
