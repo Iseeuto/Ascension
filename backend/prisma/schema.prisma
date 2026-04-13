@@ -7,6 +7,16 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Level {
+  ASPIRANT
+  EVEILLE
+  ASCENDANT
+  TRANSCENDANT
+  SUPREME
+  SACRE
+  DIVIN
+}
+
 type Section {
   title   String
   content String
@@ -14,7 +24,8 @@ type Section {
 
 model Class {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String    @unique
+  slug        String    @unique
+  name        String
   description String?
   hitDice     Int?
   sections    Section[]
@@ -26,6 +37,7 @@ model Class {
 
 model Subclass {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String    @unique
   name        String
   description String?
   classId     String    @db.ObjectId
@@ -40,10 +52,9 @@ model Subclass {
 
 model Race {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String    @unique
+  slug        String    @unique
+  name        String
   description String?
-  size        String?
-  speed       Int?
   sections    Section[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -51,10 +62,21 @@ model Race {
 
 model Feat {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  name         String    @unique
+  slug         String    @unique
+  name         String
   description  String?
   prerequisite String?
   sections     Section[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+}
+
+model Spell {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String   @unique
+  name        String
+  description String
+  level       Level
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
