@@ -1,6 +1,6 @@
 import express from "express"
 
-import { getHealth, getDatabaseHealth } from "../controllers/health.controller";
+import { getHealth, getDatabaseHealth } from "../controllers/health.controller.js";
 
 const router = express.Router();
 
