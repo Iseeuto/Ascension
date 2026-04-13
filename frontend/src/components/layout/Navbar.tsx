@@ -17,11 +17,11 @@ function NavBar() {
 
   return (
     <div className="min-h-screen">
-      <div className="mx-auto flex min-h-screen max-w-10xl flex-col px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-screen max-w-10xl flex-col px-4 py-6 sm:px-6 lg:px-8 ">
         <header
           className={[
             "bg-neutral-950 px-5 py-4 backdrop-blur md:px-7",
-            hasSlug ? "rounded-t-3xl rounded-r-3xl" : "rounded-3xl",
+            hasSlug ? "rounded-t-3xl lg:rounded-r-3xl" : "rounded-3xl",
           ].join(" ")}
         >
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -57,10 +57,19 @@ function NavBar() {
           </div>
         </header>
 
-        <div className="relative flex flex-1 justify-center">
-          {hasSlug && <Sidebar />}
+        <div className="relative flex flex-1 flex-col md:flex-row">
+          {hasSlug && (
+            <div className="md:basis-1/6 w-full">
+              <Sidebar />
+            </div>
+          )}
 
-          <main className="w-full max-w-6xl bg-neutral-100 p-6">
+          <main
+            className={[
+              "p-6",
+              hasSlug ? "md:basis-4/6 w-full" : "w-full md:basis-4/6 mx-auto",
+            ].join(" ")}
+          >
             <Outlet />
           </main>
         </div>
