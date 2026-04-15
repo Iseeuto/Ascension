@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { BuildError, validateFields } from "./utils";
+import { BuildError, validateFields } from "./utils.js";
 import { check } from "express-validator";
 
 const prisma = new PrismaClient();

@@ -1,7 +1,7 @@
 import express from "express"
 
-import { validateSubclassFields, subclassExist } from "../middleware/subclasses.middleware";
-import { addSubclass, deleteSubclass, getSubclassById, getSubclasses, updateSubclass } from "../controllers/subclasses.controller";
+import { validateSubclassFields, subclassExist } from "../middleware/subclasses.middleware.js";
+import { addSubclass, deleteSubclass, getSubclassById, getSubclasses, updateSubclass } from "../controllers/subclasses.controller.js";
 
 const router = express.Router();
 

@@ -1,7 +1,7 @@
 import express from "express"
 
-import { validateSpellFields, spellExist } from "../middleware/spells.middleware";
-import { addSpell, deleteSpell, getSpellById, getSpells, updateSpell } from "../controllers/spells.controller";
+import { validateSpellFields, spellExist } from "../middleware/spells.middleware.js";
+import { addSpell, deleteSpell, getSpellById, getSpells, updateSpell } from "../controllers/spells.controller.js";
 
 const router = express.Router();
 

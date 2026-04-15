@@ -1,7 +1,7 @@
 import express from "express"
  
-import { validateClassFields, classExist } from "../middleware/classes.middleware";
-import { addClass, deleteClass, getClassById, getClasses, updateClass } from "../controllers/classes.controller";
+import { validateClassFields, classExist } from "../middleware/classes.middleware.js";
+import { addClass, deleteClass, getClassById, getClasses, updateClass } from "../controllers/classes.controller.js";
  
 const router = express.Router();
  

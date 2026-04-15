@@ -1,7 +1,7 @@
 import express from "express"
 
-import { validateFeatFields, featExist } from "../middleware/feats.middleware";
-import { addFeat, deleteFeat, getFeatById, getFeats, updateFeat } from "../controllers/feats.controller";
+import { validateFeatFields, featExist } from "../middleware/feats.middleware.js";
+import { addFeat, deleteFeat, getFeatById, getFeats, updateFeat } from "../controllers/feats.controller.js";
 
 const router = express.Router();
 

@@ -1,7 +1,7 @@
 import express from "express"
  
-import { validateRaceFields, raceExist } from "../middleware/races.middleware";
-import { addRace, deleteRace, getRaceById, getRaces, updateRace } from "../controllers/races.controller";
+import { validateRaceFields, raceExist } from "../middleware/races.middleware.js";
+import { addRace, deleteRace, getRaceById, getRaces, updateRace } from "../controllers/races.controller.js";
  
 const router = express.Router();
  
