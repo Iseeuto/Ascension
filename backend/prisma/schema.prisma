@@ -22,28 +22,47 @@ type Section {
   content String
 }
 
+type TableColumn {
+  key   String // ex: "level", "spells", "features"
+  label String // ex: "Niveau", "Sorts", "Compétences"
+}
+
+type TableCell {
+  value String
+}
+
+type TableRow {
+  cells TableCell[]
+}
+
+type LevelTable {
+  columns TableColumn[]
+  rows    TableRow[]
+}
+
 model Class {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  slug        String    @unique
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String     @unique
   name        String
   description String?
-  hitDice     Int?
+  table       LevelTable
   sections    Section[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   subclasses Subclass[]
 }
 
 model Subclass {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  slug        String    @unique
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String     @unique
   name        String
   description String?
-  classId     String    @db.ObjectId
+  classId     String     @db.ObjectId
+  table       LevelTable
   sections    Section[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   class Class @relation(fields: [classId], references: [id])
 

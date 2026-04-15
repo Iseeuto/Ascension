@@ -1,15 +1,23 @@
 import { PrismaClient } from "@prisma/client";
-import { BuildError } from "./utils";
+import { BuildError, validateFields } from "./utils";
 import { check } from "express-validator";
 
 const prisma = new PrismaClient();
 
-rules = [
-    check("slug").isString(),
-    check("name").isString(),
-]
+const rules = [
+    check("slug").notEmpty().isString(),
+    check("name").notEmpty().isString(),
+];
 
-export async function RaceExist(req, res, next) {
+export async function validateRaceFields(req, res, next) {
+    const result = await validateFields(rules, req, res);
+
+    if (result) return result;
+
+    next();
+}
+
+export async function raceExist(req, _, next) {
     const { id } = req.params;
 
     const race = await prisma.race.findUnique({
@@ -22,4 +30,3 @@ export async function RaceExist(req, res, next) {
 
     next();
 }
-

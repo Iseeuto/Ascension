@@ -1,18 +1,18 @@
 import express from "express"
 
+import { validateSpellFields, spellExist } from "../middleware/spells.middleware";
+import { addSpell, deleteSpell, getSpellById, getSpells, updateSpell } from "../controllers/spells.controller";
 
 const router = express.Router();
 
-router.get("/");
+router.get("/", getSpells);
 
-router.get("/:id")
+router.get("/:id", spellExist, getSpellById);
 
-router.post("/");
+router.post("/", validateSpellFields, addSpell);
 
-router.put("/:id");
+router.put("/:id", spellExist, validateSpellFields, updateSpell);
 
-router.patch("/:id");
-
-router.delete("/:id");
+router.delete("/:id", spellExist, deleteSpell);
 
 export default router;

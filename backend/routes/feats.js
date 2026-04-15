@@ -1,18 +1,18 @@
 import express from "express"
 
+import { validateFeatFields, featExist } from "../middleware/feats.middleware";
+import { addFeat, deleteFeat, getFeatById, getFeats, updateFeat } from "../controllers/feats.controller";
 
 const router = express.Router();
 
-router.get("/");
+router.get("/", getFeats);
 
-router.get("/:id")
+router.get("/:id", featExist, getFeatById);
 
-router.post("/");
+router.post("/", validateFeatFields, addFeat);
 
-router.put("/:id");
+router.put("/:id", featExist, validateFeatFields, updateFeat);
 
-router.patch("/:id");
-
-router.delete("/:id");
+router.delete("/:id", featExist, deleteFeat);
 
 export default router;

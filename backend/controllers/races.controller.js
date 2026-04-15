@@ -5,14 +5,55 @@ const prisma = new PrismaClient();
 export async function getRaces(_, res) {
     const races = await prisma.race.findMany({
         include: {
-            sections : false,
-            subclasses : false
+            sections: false,
         }
     });
 
-    res.json(bookings);
+    res.json(races);
 }
 
 export async function getRaceById(req, res) {
     res.json(req.race);
+}
+
+export async function addRace(req, res) {
+    const { slug, name, description, sections } = req.body;
+
+    const race = await prisma.race.create({
+        data: {
+            slug,
+            name,
+            description,
+            sections
+        }
+    });
+
+    res.status(201).json(race);
+}
+
+export async function updateRace(req, res) {
+    const { id } = req.params;
+    const { slug, name, description, sections } = req.body;
+
+    const race = await prisma.race.update({
+        where: { id },
+        data: {
+            slug,
+            name,
+            description,
+            sections
+        }
+    });
+
+    res.json(race);
+}
+
+export async function deleteRace(req, res) {
+    const { id } = req.params;
+
+    await prisma.race.delete({
+        where: { id }
+    });
+
+    res.sendStatus(200);
 }

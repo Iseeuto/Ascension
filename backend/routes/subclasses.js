@@ -1,18 +1,18 @@
 import express from "express"
 
+import { validateSubclassFields, subclassExist } from "../middleware/subclasses.middleware";
+import { addSubclass, deleteSubclass, getSubclassById, getSubclasses, updateSubclass } from "../controllers/subclasses.controller";
 
 const router = express.Router();
 
-router.get("/");
+router.get("/", getSubclasses);
 
-router.get("/:id")
+router.get("/:id", subclassExist, getSubclassById);
 
-router.post("/");
+router.post("/", validateSubclassFields, addSubclass);
 
-router.put("/:id");
+router.put("/:id", subclassExist, validateSubclassFields, updateSubclass);
 
-router.patch("/:id");
-
-router.delete("/:id");
+router.delete("/:id", subclassExist, deleteSubclass);
 
 export default router;
