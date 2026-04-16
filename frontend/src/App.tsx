@@ -3,6 +3,9 @@ import NavBar from "./components/layout/Navbar";
 import Homepage from "./pages/Homepage";
 import NotFound from "./pages/NotFound";
 import Catalogue from "./pages/Catalogue";
+import Display from "./pages/Display";
+
+const pages = ["classes", "races", "feats", "spells", "rules"];
 
 function App() {
   return (
@@ -10,22 +13,15 @@ function App() {
       <Route element={<NavBar />}>
         <Route index element={<Homepage />} />
 
-        <Route path="/classes" element={<Catalogue kind="classes" />} />
-        <Route path="/classes/:slug" element={<Catalogue kind="classes" />} />
-
-        <Route path="/races" element={<Catalogue kind="races" />} />
-        <Route path="/races/:slug" element={<Catalogue kind="races" />} />
-
-        <Route path="/feats" element={<Catalogue kind="feats" />} />
-        <Route path="/feats/:slug" element={<Catalogue kind="feats" />} />
-
-        <Route path="/spells" element={<Catalogue kind="spells" />} />
-        <Route path="/spells/:slug" element={<Catalogue kind="spells" />} />
-
-        <Route path="/rules" element={<Catalogue kind="rules" />} />
-        <Route path="/rules/:slug" element={<Catalogue kind="rules" />} />
+        {pages.map((page) => (
+          <>
+            <Route path={`/${page}`} element={<Catalogue />} />
+            <Route path={`/${page}/:slug`} element={<Display />} />
+            <Route path={`/${page}/:slug/:subslug`} element={<Display />} />
+          </>
+        ))}
+        <Route path="*" element={<NotFound />} />
       </Route>
-      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
