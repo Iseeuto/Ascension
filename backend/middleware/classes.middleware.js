@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { BuildError, validateFields } from "./utils.js";
 import { check } from "express-validator";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma.js";
 
 const rules = [
     check("slug").notEmpty().isString(),
@@ -25,6 +23,21 @@ export async function classExist(req, _, next) {
 
     const cls = await prisma.class.findUnique({
         where: { id },
+        include: { subclasses: true }
+    });
+
+    if (!cls) throw BuildError(404, "Class not found.");
+
+    req.cls = cls;
+
+    next();
+}
+
+export async function classSlugExist(req, _, next) {
+    const { slug } = req.params;
+
+    const cls = await prisma.class.findUnique({
+        where: { slug },
         include: { subclasses: true }
     });
 

@@ -1,18 +1,24 @@
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma.js";
+import { mapFeatCatalogueItem } from "./catalogue.controller.js";
 
 export async function getFeats(_, res) {
     const feats = await prisma.feat.findMany({
         include: {
-            sections: false,
+            sections: true,
+        },
+        orderBy: {
+            name: "asc",
         }
     });
 
-    res.json(feats);
+    res.json(feats.map(mapFeatCatalogueItem));
 }
 
 export async function getFeatById(req, res) {
+    res.json(req.feat);
+}
+
+export async function getFeatBySlug(req, res) {
     res.json(req.feat);
 }
 

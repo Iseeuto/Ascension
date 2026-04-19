@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { BuildError, validateFields } from "./utils.js";
 import { check } from "express-validator";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma.js";
 
 const rules = [
     check("slug").notEmpty().isString(),
@@ -22,6 +20,20 @@ export async function featExist(req, _, next) {
 
     const feat = await prisma.feat.findUnique({
         where: { id }
+    });
+
+    if (!feat) throw BuildError(404, "Feat not found.");
+
+    req.feat = feat;
+
+    next();
+}
+
+export async function featSlugExist(req, _, next) {
+    const { slug } = req.params;
+
+    const feat = await prisma.feat.findUnique({
+        where: { slug }
     });
 
     if (!feat) throw BuildError(404, "Feat not found.");

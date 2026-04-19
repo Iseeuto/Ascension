@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { BuildError, validateFields } from "./utils.js";
 import { check } from "express-validator";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma.js";
 
 const rules = [
     check("slug").notEmpty().isString(),
@@ -22,6 +20,20 @@ export async function raceExist(req, _, next) {
 
     const race = await prisma.race.findUnique({
         where: { id }
+    });
+
+    if (!race) throw BuildError(404, "Race not found.");
+
+    req.race = race;
+
+    next();
+}
+
+export async function raceSlugExist(req, _, next) {
+    const { slug } = req.params;
+
+    const race = await prisma.race.findUnique({
+        where: { slug }
     });
 
     if (!race) throw BuildError(404, "Race not found.");

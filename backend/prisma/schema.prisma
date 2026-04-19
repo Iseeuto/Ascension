@@ -28,6 +28,7 @@ type TableColumn {
 }
 
 type TableCell {
+  key   String
   value String
 }
 

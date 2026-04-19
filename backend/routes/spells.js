@@ -1,11 +1,13 @@
 import express from "express"
 
-import { validateSpellFields, spellExist } from "../middleware/spells.middleware.js";
-import { addSpell, deleteSpell, getSpellById, getSpells, updateSpell } from "../controllers/spells.controller.js";
+import { validateSpellFields, spellExist, spellSlugExist } from "../middleware/spells.middleware.js";
+import { addSpell, deleteSpell, getSpellById, getSpellBySlug, getSpells, updateSpell } from "../controllers/spells.controller.js";
 
 const router = express.Router();
 
 router.get("/", getSpells);
+
+router.get("/slug/:slug", spellSlugExist, getSpellBySlug);
 
 router.get("/:id", spellExist, getSpellById);
 

@@ -1,18 +1,24 @@
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma.js";
+import { mapRaceCatalogueItem } from "./catalogue.controller.js";
 
 export async function getRaces(_, res) {
     const races = await prisma.race.findMany({
         include: {
-            sections: false,
+            sections: true,
+        },
+        orderBy: {
+            name: "asc",
         }
     });
 
-    res.json(races);
+    res.json(races.map(mapRaceCatalogueItem));
 }
 
 export async function getRaceById(req, res) {
+    res.json(req.race);
+}
+
+export async function getRaceBySlug(req, res) {
     res.json(req.race);
 }
 

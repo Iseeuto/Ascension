@@ -1,19 +1,33 @@
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma.js";
+import { levelLabels, mapSpellCatalogueItem } from "./catalogue.controller.js";
 
 export async function getSpells(req, res) {
     const { level } = req.query;
 
     const spells = await prisma.spell.findMany({
         where: level ? { level } : undefined,
+        orderBy: [
+            {
+                level: "asc",
+            },
+            {
+                name: "asc",
+            }
+        ]
     });
 
-    res.json(spells);
+    res.json(spells.map(mapSpellCatalogueItem));
 }
 
 export async function getSpellById(req, res) {
     res.json(req.spell);
+}
+
+export async function getSpellBySlug(req, res) {
+    res.json({
+        ...req.spell,
+        levelLabel: levelLabels[req.spell.level] ?? req.spell.level,
+    });
 }
 
 export async function addSpell(req, res) {

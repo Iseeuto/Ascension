@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma.js";
+import { mapSubclassCatalogueItem } from "./catalogue.controller.js";
 
 export async function getSubclasses(req, res) {
     const { classId } = req.query;
@@ -8,14 +7,27 @@ export async function getSubclasses(req, res) {
     const subclasses = await prisma.subclass.findMany({
         where: classId ? { classId } : undefined,
         include: {
-            class: false,
+            class: {
+                select: {
+                    id: true,
+                    name: true,
+                    slug: true,
+                }
+            },
+        },
+        orderBy: {
+            name: "asc",
         }
     });
 
-    res.json(subclasses);
+    res.json(subclasses.map(mapSubclassCatalogueItem));
 }
 
 export async function getSubclassById(req, res) {
+    res.json(req.subclass);
+}
+
+export async function getSubclassBySlug(req, res) {
     res.json(req.subclass);
 }
 

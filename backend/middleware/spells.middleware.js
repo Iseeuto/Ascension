@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { BuildError, validateFields } from "./utils.js";
 import { check } from "express-validator";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma.js";
 
 const VALID_LEVELS = ["ASPIRANT", "EVEILLE", "ASCENDANT", "TRANSCENDANT", "SUPREME", "SACRE", "DIVIN"];
 
@@ -26,6 +24,20 @@ export async function spellExist(req, _, next) {
 
     const spell = await prisma.spell.findUnique({
         where: { id }
+    });
+
+    if (!spell) throw BuildError(404, "Spell not found.");
+
+    req.spell = spell;
+
+    next();
+}
+
+export async function spellSlugExist(req, _, next) {
+    const { slug } = req.params;
+
+    const spell = await prisma.spell.findUnique({
+        where: { slug }
     });
 
     if (!spell) throw BuildError(404, "Spell not found.");

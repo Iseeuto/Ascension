@@ -1,11 +1,13 @@
 import express from "express"
 
-import { validateFeatFields, featExist } from "../middleware/feats.middleware.js";
-import { addFeat, deleteFeat, getFeatById, getFeats, updateFeat } from "../controllers/feats.controller.js";
+import { validateFeatFields, featExist, featSlugExist } from "../middleware/feats.middleware.js";
+import { addFeat, deleteFeat, getFeatById, getFeatBySlug, getFeats, updateFeat } from "../controllers/feats.controller.js";
 
 const router = express.Router();
 
 router.get("/", getFeats);
+
+router.get("/slug/:slug", featSlugExist, getFeatBySlug);
 
 router.get("/:id", featExist, getFeatById);
 
