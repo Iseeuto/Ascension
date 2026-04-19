@@ -2,12 +2,14 @@ import { NavLink } from "react-router-dom";
 
 interface CardProps {
   title?: string;
+  eyebrow?: string;
   subtitle?: string;
   description?: string;
   image?: string;
   redirect?: string;
   accentFrom?: string;
   accentTo?: string;
+  badges?: string[];
 }
 
 function Card({
@@ -22,57 +24,50 @@ function Card({
   const isEmoji = image && image.length <= 2;
 
   return (
-    <NavLink to={redirect}>
+    <NavLink to={redirect} className="block h-full">
       <div
         className="
-        bg-white border border-gray-200 rounded-2xl overflow-hidden
-        transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:scale-105"
+        group h-full rounded-[1.75rem] border border-stone-200/80 bg-white/95 overflow-hidden
+        shadow-[0_20px_60px_-36px_rgba(15,23,42,0.45)]
+        transition-all duration-200 hover:-translate-y-1 hover:border-stone-300 hover:shadow-[0_24px_80px_-38px_rgba(15,23,42,0.55)]"
       >
-        {/* Image ou placeholder emoji */}
         {image &&
           (isEmoji ? (
-            <div className="w-full aspect-video flex items-center justify-center bg-gray-50 text-5xl">
+            <div className="flex aspect-video w-full items-center justify-center bg-stone-50 text-5xl">
               {image}
             </div>
           ) : (
             <img
               src={image}
               alt={title}
-              className="w-full aspect-video object-cover"
+              className="aspect-video w-full object-cover"
             />
           ))}
 
-        {/* Barre accent */}
         <div
-          className="h-0.5 w-full"
+          className="h-1 w-full"
           style={{
             background: `linear-gradient(90deg, ${accentFrom}, ${accentTo})`,
           }}
         />
 
-        {/* Corps */}
-        <div className="p-3.5">
-          <p className="font-serif text-xl font-semibold text-gray-900 mb-0.5">
+        <div className="flex h-full flex-col p-4">
+          <p className="mb-1 font-serif text-xl font-semibold text-stone-900 transition-colors group-hover:text-black">
             {title}
           </p>
+
           {subtitle && (
-            <p className="font-serif text-xs italic text-gray-400 mb-2">
+            <p className="mb-3 font-serif text-sm italic text-stone-500">
               {subtitle}
             </p>
           )}
+
           {description && (
-            <p className="text-xs text-gray-500 leading-relaxed">
+            <p className="line-clamp-4 text-sm leading-relaxed text-stone-600">
               {description}
             </p>
           )}
         </div>
-
-        <div
-          className="h-0.5 w-full"
-          style={{
-            background: `linear-gradient(90deg, ${accentTo}, ${accentFrom})`,
-          }}
-        />
       </div>
     </NavLink>
   );
@@ -84,8 +79,8 @@ interface CardGridProps {
 
 export function CardGrid({ children }: CardGridProps) {
   return (
-    <div className="p-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="pb-6">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {children}
       </div>
     </div>

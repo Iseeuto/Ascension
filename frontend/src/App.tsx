@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/layout/Navbar";
 import Homepage from "./pages/Homepage";
@@ -5,7 +6,7 @@ import NotFound from "./pages/NotFound";
 import Catalogue from "./pages/Catalogue";
 import Display from "./pages/Display";
 
-const pages = ["classes", "races", "feats", "spells", "rules"];
+const pages = ["classes", "subclasses", "races", "feats", "spells", "rules"];
 
 function App() {
   return (
@@ -14,11 +15,11 @@ function App() {
         <Route index element={<Homepage />} />
 
         {pages.map((page) => (
-          <>
+          <Fragment key={page}>
             <Route path={`/${page}`} element={<Catalogue />} />
             <Route path={`/${page}/:slug`} element={<Display />} />
             <Route path={`/${page}/:slug/:subslug`} element={<Display />} />
-          </>
+          </Fragment>
         ))}
         <Route path="*" element={<NotFound />} />
       </Route>

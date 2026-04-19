@@ -35,17 +35,17 @@ function NavBar() {
               </h1>
             </NavLink>
 
-            <nav className="flex flex-wrap justify-center gap-3">
+            <nav className="flex flex-wrap justify-center gap-5">
               {navItems.map((item) => (
                 <NavLink
                   key={item.to}
                   to={item.to}
                   className={({ isActive }) =>
                     [
-                      "rounded-full border px-4 py-2 text-base tracking-wider transition",
+                      "px-2 py-1 text-base tracking-wider transition border-b-2 font-semibold",
                       isActive
-                        ? "border-neutral-600 bg-white/5 text-stone-200"
-                        : "border-neutral-100/15 bg-neutral-900/25 text-stone-200 hover:border-neutral-200/40 hover:bg-white/10",
+                        ? "border-white text-white"
+                        : "border-transparent text-stone-300 hover:text-white hover:border-white/40",
                     ].join(" ")
                   }
                 >
