@@ -3,12 +3,21 @@ import { check } from "express-validator";
 import { prisma } from "../lib/prisma.js";
 
 const VALID_LEVELS = ["ASPIRANT", "EVEILLE", "ASCENDANT", "TRANSCENDANT", "SUPREME", "SACRE", "DIVIN"];
+const VALID_CATEGORIES = ["OFFENSIVE", "DEFENSIVE", "UTILITY"];
 
 const rules = [
     check("slug").notEmpty().isString(),
     check("name").notEmpty().isString(),
     check("description").notEmpty().isString(),
     check("level").notEmpty().isIn(VALID_LEVELS),
+    check("category").optional({ values: "null" }).isIn(VALID_CATEGORIES),
+    check("prerequisiteSlugs")
+        .optional({ values: "null" })
+        .isArray(),
+    check("prerequisiteSlugs.*")
+        .optional({ values: "null" })
+        .isString()
+        .notEmpty(),
 ];
 
 export async function validateSpellFields(req, res, next) {

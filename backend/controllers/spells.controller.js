@@ -1,5 +1,9 @@
 import { prisma } from "../lib/prisma.js";
-import { levelLabels, mapSpellCatalogueItem } from "./catalogue.controller.js";
+import {
+    levelLabels,
+    mapSpellCatalogueItem,
+    spellCategoryLabels,
+} from "./catalogue.controller.js";
 
 export async function getSpells(req, res) {
     const { level } = req.query;
@@ -24,21 +28,28 @@ export async function getSpellById(req, res) {
 }
 
 export async function getSpellBySlug(req, res) {
+    const category = req.spell.category ?? "UTILITY";
+
     res.json({
         ...req.spell,
         levelLabel: levelLabels[req.spell.level] ?? req.spell.level,
+        category,
+        categoryLabel: spellCategoryLabels[category] ?? spellCategoryLabels.UTILITY,
+        prerequisiteSlugs: req.spell.prerequisiteSlugs ?? [],
     });
 }
 
 export async function addSpell(req, res) {
-    const { slug, name, description, level } = req.body;
+    const { slug, name, description, level, category, prerequisiteSlugs } = req.body;
 
     const spell = await prisma.spell.create({
         data: {
             slug,
             name,
             description,
-            level
+            level,
+            category,
+            prerequisiteSlugs: prerequisiteSlugs ?? [],
         }
     });
 
@@ -47,7 +58,7 @@ export async function addSpell(req, res) {
 
 export async function updateSpell(req, res) {
     const { id } = req.params;
-    const { slug, name, description, level } = req.body;
+    const { slug, name, description, level, category, prerequisiteSlugs } = req.body;
 
     const spell = await prisma.spell.update({
         where: { id },
@@ -55,7 +66,9 @@ export async function updateSpell(req, res) {
             slug,
             name,
             description,
-            level
+            level,
+            category,
+            prerequisiteSlugs: prerequisiteSlugs ?? [],
         }
     });
 

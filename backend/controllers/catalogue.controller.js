@@ -8,6 +8,12 @@ const levelLabels = {
   DIVIN: "Divin",
 };
 
+const spellCategoryLabels = {
+  OFFENSIVE: "Offensif",
+  DEFENSIVE: "Defensif",
+  UTILITY: "Utilitaire",
+};
+
 function trimText(value = "") {
   return value.replace(/\s+/g, " ").trim();
 }
@@ -118,6 +124,8 @@ export function mapFeatCatalogueItem(feat) {
 
 export function mapSpellCatalogueItem(spell) {
   const levelLabel = levelLabels[spell.level] ?? spell.level;
+  const category = spell.category ?? "UTILITY";
+  const categoryLabel = spellCategoryLabels[category] ?? spellCategoryLabels.UTILITY;
 
   return {
     id: spell.id,
@@ -126,13 +134,25 @@ export function mapSpellCatalogueItem(spell) {
     description: spell.description,
     level: spell.level,
     levelLabel,
-    summary: toSummary(spell.description, `${spell.name} est un sort de niveau ${levelLabel}.`),
-    badges: ["Sort", levelLabel],
+    category,
+    categoryLabel,
+    prerequisiteSlugs: spell.prerequisiteSlugs ?? [],
+    summary: toSummary(
+      spell.description,
+      `${spell.name} est un sort ${categoryLabel.toLowerCase()} de niveau ${levelLabel}.`,
+    ),
+    badges: ["Sort", categoryLabel, levelLabel],
     metrics: [
       { label: "Niveau", value: levelLabel },
-      { label: "Type", value: "Sort" },
+      { label: "Categorie", value: categoryLabel },
+      {
+        label: "Prerequis",
+        value: spell.prerequisiteSlugs?.length
+          ? String(spell.prerequisiteSlugs.length)
+          : "Aucun",
+      },
     ],
   };
 }
 
-export { levelLabels };
+export { levelLabels, spellCategoryLabels };
