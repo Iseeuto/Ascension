@@ -13,7 +13,6 @@ function Sidebar() {
 
   useEffect(() => {
     if (kind !== "classes" || !slug) {
-      setItems([]);
       return;
     }
 

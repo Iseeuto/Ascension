@@ -11,6 +11,8 @@ export type CatalogueMetric = {
   value: string;
 };
 
+export type SpellCategory = "OFFENSIVE" | "DEFENSIVE" | "UTILITY";
+
 export type CatalogueItem = {
   id: string;
   slug: string;
@@ -20,8 +22,11 @@ export type CatalogueItem = {
   badges?: string[];
   metrics?: CatalogueMetric[];
   prerequisite?: string | null;
+  prerequisiteSlugs?: string[];
   level?: string;
   levelLabel?: string;
+  category?: SpellCategory;
+  categoryLabel?: string;
   sectionCount?: number;
   tableRowCount?: number;
   subclassCount?: number;

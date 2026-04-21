@@ -22,7 +22,7 @@ function Homepage() {
           style={{ animationDelay: "600ms" }}
         />
 
-        {/* texte Wiki */}
+        {/* wiki */}
         <span
           className="
     absolute left-1/2 -translate-x-1/2

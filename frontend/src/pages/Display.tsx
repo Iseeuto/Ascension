@@ -7,25 +7,19 @@ import {
   type CatalogueItem,
 } from "../utils/catalogueConfig.ts";
 
-function Display() {
-  const location = useLocation().pathname.split("/").filter(Boolean);
-
-  const kind = location.length > 0 ? location[0] : undefined;
-  const slug = location.length > 1 ? location[1] : undefined;
-  const subSlug = location.length > 2 ? location[2] : undefined;
-
+function DisplayView({
+  kind,
+  slug,
+  subSlug,
+}: {
+  kind: keyof typeof catalogueConfig;
+  slug: string;
+  subSlug?: string;
+}) {
   const [data, setData] = useState<CatalogueItem | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isCatalogueKind(kind) || !slug) {
-      setData(null);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-
     const endpoint =
       subSlug && kind === "classes"
         ? `/subclasses/slug/${subSlug}`
@@ -134,6 +128,20 @@ function Display() {
       ) : null}
     </section>
   );
+}
+
+function Display() {
+  const location = useLocation().pathname.split("/").filter(Boolean);
+
+  const kind = location.length > 0 ? location[0] : undefined;
+  const slug = location.length > 1 ? location[1] : undefined;
+  const subSlug = location.length > 2 ? location[2] : undefined;
+
+  if (!isCatalogueKind(kind) || !slug) {
+    return null;
+  }
+
+  return <DisplayView key={`${kind}-${slug}-${subSlug ?? ""}`} kind={kind} slug={slug} subSlug={subSlug} />;
 }
 
 export default Display;

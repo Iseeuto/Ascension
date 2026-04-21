@@ -2,6 +2,7 @@ import { Navigate, useLocation } from "react-router-dom";
 
 import Card, { CardGrid } from "../components/Card";
 import { useEffect, useMemo, useState } from "react";
+import SpellTree from "../components/spells/SpellTree";
 
 import api from "../api/axios.ts";
 import AccentColors from "../utils/accentColors.ts";
@@ -11,33 +12,17 @@ import {
   type CatalogueItem,
 } from "../utils/catalogueConfig.ts";
 
-function Catalogue() {
-  const location = useLocation().pathname.split("/").filter(Boolean);
-
-  const kind = location.length > 0 ? location[0] : undefined;
-
+function CatalogueView({ kind }: { kind: keyof typeof catalogueConfig }) {
+  const config = catalogueConfig[kind];
   const [data, setData] = useState<CatalogueItem[]>([]);
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState<string>("all");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(Boolean(config.endpoint));
 
   useEffect(() => {
-    if (!isCatalogueKind(kind)) {
-      return;
-    }
-
-    const config = catalogueConfig[kind];
-
-    setSearch("");
-    setActiveFilter("all");
-
     if (!config.endpoint) {
-      setData([]);
-      setLoading(false);
       return;
     }
-
-    setLoading(true);
 
     api
       .get(config.endpoint)
@@ -46,13 +31,7 @@ function Catalogue() {
       })
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
-  }, [kind]);
-
-  if (!isCatalogueKind(kind)) {
-    return <Navigate to="/*" />;
-  }
-
-  const config = catalogueConfig[kind];
+  }, [config.endpoint, kind]);
 
   const availableFilters = useMemo(() => {
     const values = new Set<string>();
@@ -110,11 +89,85 @@ function Catalogue() {
     });
   }, [activeFilter, data, kind, search]);
 
+  const hasSpellCategories = useMemo(
+    () =>
+      kind === "spells" &&
+      data.some(
+        (item) =>
+          item.category === "OFFENSIVE" ||
+          item.category === "DEFENSIVE" ||
+          item.category === "UTILITY",
+      ),
+    [data, kind],
+  );
+
   if (loading) {
     return (
       <div className="px-2 py-10 text-stone-500">
         Chargement du catalogue...
       </div>
+    );
+  }
+
+  if (kind === "spells" && hasSpellCategories) {
+    return (
+      <section className="-mx-6 -my-6 sm:-mx-6 sm:-my-6">
+        <div className="relative">
+          <div className="absolute left-5 top-5 z-30 w-[min(28rem,calc(100%-2.5rem))] rounded-[1.75rem] border border-white/12 bg-black/42 p-5 text-white backdrop-blur-xl">
+            <h1 className="mt-2 font-[Vecna] text-5xl tracking-widest text-white">
+              {config.label}
+            </h1>
+
+            <div className="mt-5 space-y-4">
+              <label className="block">
+                <input
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="Chercher un sort..."
+                  className="w-full rounded-2xl border border-white/12 bg-white/8 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-white/30 focus:bg-white/12"
+                />
+              </label>
+
+              {availableFilters.length > 1 && (
+                <div className="flex flex-wrap gap-2">
+                  {availableFilters.map((filter) => (
+                    <button
+                      key={filter}
+                      type="button"
+                      onClick={() => setActiveFilter(filter)}
+                      className={[
+                        "rounded-full px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] transition",
+                        activeFilter === filter
+                          ? "bg-white text-stone-950"
+                          : "border border-white/12 bg-white/8 text-white/72 hover:border-white/26 hover:bg-white/12 hover:text-white",
+                      ].join(" ")}
+                    >
+                      {filter === "all" ? "Tout" : filter}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {filteredData.length === 0 ? (
+            <div className="flex h-[calc(100vh-9rem)] min-h-195 items-center justify-center rounded-4xl bg-[#090c10] px-6 text-center text-white">
+              <div className="max-w-xl rounded-[1.75rem] border border-white/10 bg-white/6 px-6 py-10 backdrop-blur">
+                <h2 className="font-serif text-3xl text-white">
+                  {config.emptyTitle}
+                </h2>
+                <p className="mt-4 text-sm leading-7 text-white/70">
+                  {data.length === 0
+                    ? config.emptyText
+                    : "Aucun sort ne correspond a la recherche ou au filtre actuel."}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <SpellTree spells={filteredData} allSpells={data} />
+          )}
+        </div>
+      </section>
     );
   }
 
@@ -189,7 +242,9 @@ function Catalogue() {
               kind === "subclasses"
                 ? elt.parent?.name
                 : kind === "spells"
-                  ? elt.levelLabel
+                  ? [elt.categoryLabel, elt.levelLabel]
+                      .filter(Boolean)
+                      .join(" • ")
                   : kind === "feats"
                     ? elt.prerequisite || "Sans prerequis"
                     : undefined;
@@ -212,6 +267,17 @@ function Catalogue() {
       )}
     </section>
   );
+}
+
+function Catalogue() {
+  const location = useLocation().pathname.split("/").filter(Boolean);
+  const kind = location.length > 0 ? location[0] : undefined;
+
+  if (!isCatalogueKind(kind)) {
+    return <Navigate to="/*" />;
+  }
+
+  return <CatalogueView key={kind} kind={kind} />;
 }
 
 export default Catalogue;
